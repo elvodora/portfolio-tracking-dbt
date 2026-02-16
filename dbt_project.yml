@@ -47,6 +47,15 @@ models:
       portfolio:      # One specific data mart - Applies to all files under models/marts/portfolio
         +materialized: table
         +schema: MART_PORTFOLIO
+# Configuring Seeds
+seeds:
+  +schema: SEED_DATA
+  portfolio_tracking:
+    ABC_Bank_SECURITY_INFO:
+      +post-hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+      +column_types:
+        LOAD_TS: TIMESTAMP
 
 # Configuring Snapshots
 # Full documentation: https://docs.getdbt.com/reference/snapshot-configs
